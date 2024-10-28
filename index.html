@@ -4,99 +4,139 @@
     <title>Adams sockkalkylator</title>
     <meta charset="UTF-8">
     <style>
-        body { 
-            font-family: Inter, sans-serif;
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="number"] {
-            padding: 5px;
-            width: 100px;
-        }
-        .result {
-            margin-top: 10px;
-            padding: 5px;
-            background-color: #f0f0f0;
-        }
-        .required:after {
-            content: "";
-            color: red;
-        }
-        .unit {
-            color: #666;
-            font-size: 0.9em;
-            margin-left: 5px;
-        }
-        .section-header {
-            margin-top: 20px;
-            margin-bottom: 10px;
-            font-weight: bold;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 5px;
-        }
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .button-group button {
-            padding: 8px 16px;
-            cursor: pointer;
-        }
-        .dynamic {
-            color: #0066cc;
-            font-weight: bold;
-        }
-        #instructions {
-            line-height: 1.5;
-            margin-top: 30px;
-        }
-        #instructions h3 {
-            margin-top: 25px;
-		margin-bottom: 6px;
-            color: #333;
-        }
-        #instructions p {
-            margin-bottom: 15px;
-		margin-top: 0;
-        }
+  body { 
+    font-family: Inter, sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    body {
+        margin: 10px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .section-header {
+        font-size: 18px;
+    }
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+input[type="number"] {
+    padding: 10px;
+    width: 120px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+    input[type="number"] {
+        width: 100px;
+        font-size: 16px; /* Keep font size 16px for mobile inputs */
+        padding: 8px;
+    }
+}
+
+.result {
+    margin-top: 12px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
+.section-header {
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.button-group button {
+    padding: 12px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+}
+
+@media (max-width: 600px) {
+    .button-group button {
+        padding: 10px 16px;
+        width: 50%;
+    }
+}
+
+.dynamic {
+    color: #0066cc;
+    font-weight: bold;
+}
+
+#instructions {
+    line-height: 1.6;
+    margin-top: 30px;
+}
+
+#instructions h3 {
+    margin-top: 25px;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 18px;
+}
+
+#instructions p {
+    margin-bottom: 15px;
+    margin-top: 0;
+}
+
+/* Help icon and tooltip */
 .label-with-help {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
     position: relative;
-    margin-bottom: 5px;
-}
-
-.input-with-unit {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    margin-bottom: 8px;
 }
 
 .help-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: #666;
     color: white;
-    font-size: 12px;
+    font-size: 14px;
     cursor: pointer;
-}
-
-.help-icon:hover {
-    background: #333;
+    position: relative;
 }
 
 .help-text {
@@ -104,77 +144,87 @@
     position: absolute;
     top: 100%;
     left: 0;
-    width: max-content;
-    max-width: 300px;
-    padding: 8px;
-    margin-top: 5px;
+    width: 300px;
+    padding: 12px;
+    margin-top: 8px;
     border-radius: 4px;
     background: #333;
     color: white;
     font-size: 14px;
-    z-index: 1;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-.help-icon.active + .help-text {
-    display: block;
+@media (max-width: 600px) {
+    .help-text {
+        width: calc(100vw - 40px);
+        left: -100px;
+    }
 }
 
+
+/* Checklist styles */
 .checklist {
-    margin: 10px 0;
-    padding-left: 0px;
+    margin: 15px 0;
 }
 
 .checkbox-item {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
-    margin-bottom: 8px;
-    cursor: pointer;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
 }
 
 .checkbox-item input[type="checkbox"] {
-    margin-top: 3px;  /* Align checkbox with text */
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
 }
 
-.checkbox-text {
-    line-height: 1.4;
-}
-
-/* Optional: Style for checked items */
-.checkbox-item input[type="checkbox"]:checked + .checkbox-text {
-    color: #666;
-    text-decoration: line-through;
-}
-
-
+/* Counter styles */
 .repeat-counter {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 10px 0 20px 0;
-    background-color: #f5f5f5;  /* Light gray background by default */
-    padding: 5px 10px;
+    gap: 12px;
+    margin: 15px 0 20px 0;
+    background-color: #f5f5f5;
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.repeat-counter.completed {
+    background-color: #e8f5e9;  /* Light green background */
+    border-color: #81c784;      /* Green border */
+}
+
+.repeat-counter.completed::after {
+    content: "✓";
+    color: #2e7d32;            /* Dark green checkmark */
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+/* Make sure the transition is smooth */
+.repeat-counter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 15px 0 20px 0;
+    background-color: #f5f5f5;
+    padding: 12px;
     border-radius: 4px;
     border: 1px solid #e0e0e0;
     transition: all 0.3s ease;  /* Smooth transition for color changes */
 }
 
-
-.repeat-counter.completed {
-    background-color: #e8f5e9;  /* Green background when completed */
-    border-color: #81c784;
-}
-
-.repeat-counter.completed::after {
-    content: "✓";
-    color: #2e7d32;
-    margin-left: 10px;
-    font-weight: bold;
-}
-
 .counter-btn {
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     border: 1px solid #ccc;
     border-radius: 50%;
     background: #fff;
@@ -182,26 +232,50 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 20px;
+    touch-action: manipulation;
 }
 
-.counter-btn:hover {
-    background: #f0f0f0;
-}
-
-.counter-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+@media (max-width: 600px) {
+    .counter-btn {
+        width: 44px; /* Larger touch target on mobile */
+        height: 44px;
+    }
 }
 
 .counter-value {
-    min-width: 30px;
+    min-width: 40px;
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: bold;
 }
 
-.counter-total {
-    color: #666;
+/* Add sticky navigation for mobile */
+@media (max-width: 600px) {
+    .section-header {
+        position: sticky;
+        top: 0;
+        background: white;
+        padding: 10px 0;
+        z-index: 10;
+        margin-top: 15px;
+    }
+
+    /* Add more spacing between sections for better readability */
+    #instructions > div {
+        margin-bottom: 30px;
+    }
+
+    /* Make checkboxes easier to tap */
+    .checkbox-item {
+        padding: 12px;
+    }
+
+    /* Improve counter readability */
+    .repeat-counter {
+        padding: 15px;
+        margin: 20px 0;
+    }
 }
 
 
@@ -490,7 +564,7 @@
     </label>
 </div>
 
-        <p>Nu har du rätt antal maskor igen: <span class="dynamic" id="d_perNeedle6">0</span> maskor per sticka och <span class="dynamic" id="d_totalAfterIncrease2">0</span> maskor totalt.</p>
+<p>Nu har du rätt antal maskor igen: <span class="dynamic" id="d_perNeedle6">0</span> maskor per sticka och <span class="dynamic" id="d_totalAfterIncrease2">0</span> maskor totalt.</p>
 
         <p>Fortsätt att sticka benet och mudden i valfri längd.</p>
     </div>
@@ -669,6 +743,7 @@ function calculate() {
     // Calculate length before gusset
     // b - (e × 0.75 / d) - 0.75
     const lengthBeforeGusset = Math.ceil((footLength - (totalAfterIncrease * 0.75 / rowsPerCm) - 0.75) * 2) / 2;
+    
 
     // Update results
     document.getElementById('totalCastOn').textContent = totalCastOn;
@@ -679,6 +754,10 @@ function calculate() {
     document.getElementById('heelWrap').textContent = heelWrap;
     document.getElementById('centralHeel').textContent = centralHeel;
     document.getElementById('lengthBeforeGusset').textContent = lengthBeforeGusset.toFixed(1);
+    document.querySelectorAll('[id^="d_totalAfterIncrease"]').forEach(element => {
+        element.textContent = totalAfterIncrease;
+    });
+    
 
     updateInstructions();
     saveFormValues();
@@ -733,10 +812,12 @@ function updateInstructions() {
         updateElement('d_perNeedleMinus2', parseInt(perNeedle) - 2);
         updateElement('d_perNeedlePlus2', parseInt(perNeedle) + 2);
         updateElement('d_perNeedle6', perNeedle);
+	updateElement('d_totalAfterIncrease2', totalAfterIncrease);
     } catch (e) {
         console.error('Error updating instructions:', e);
     }
 }
+
 
 
 function initializeCounter() {
@@ -884,23 +965,35 @@ function initializeCounter() {
     });
 
     // Help icon listeners
-    document.querySelectorAll('.help-icon').forEach(icon => {
-        icon.addEventListener('click', function(e) {
-            document.querySelectorAll('.help-icon').forEach(otherIcon => {
-                if (otherIcon !== this) otherIcon.classList.remove('active');
-            });
-            this.classList.toggle('active');
+   document.querySelectorAll('.help-icon').forEach(icon => {
+    icon.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent click from immediately closing tooltip
+        
+        // Close all other tooltips
+        document.querySelectorAll('.help-text').forEach(tooltip => {
+            if (tooltip !== this.nextElementSibling) {
+                tooltip.style.display = 'none';
+            }
         });
-    });
-
-    // Outside click listener for tooltips
-    document.addEventListener('click', function(e) {
-        if (!e.target.classList.contains('help-icon')) {
-            document.querySelectorAll('.help-icon').forEach(icon => {
-                icon.classList.remove('active');
-            });
+        
+        // Toggle this tooltip
+        const tooltip = this.nextElementSibling;
+        if (tooltip.style.display === 'block') {
+            tooltip.style.display = 'none';
+        } else {
+            tooltip.style.display = 'block';
         }
     });
+});
+
+// Close tooltip when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('help-icon')) {
+        document.querySelectorAll('.help-text').forEach(tooltip => {
+            tooltip.style.display = 'none';
+        });
+    }
+});
 
     // Keyboard navigation for help icons
     document.querySelectorAll('.help-icon').forEach(icon => {
