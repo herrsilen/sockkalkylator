@@ -2,9 +2,13 @@
 <html>
 <head>
     <title>Adams sockkalkylator</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
     <meta charset="UTF-8">
     <style>
-  body { 
+
+
+body { 
     font-family: Inter, sans-serif;
     max-width: 800px;
     margin: 20px auto;
@@ -17,7 +21,7 @@
     body {
         margin: 10px;
         padding: 10px;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     h1 {
@@ -38,6 +42,7 @@ label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
+    font-size: 16px;
 }
 
 input[type="number"] {
@@ -46,13 +51,23 @@ input[type="number"] {
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: none;
+}
+
+/* Remove spinner buttons */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 @media (max-width: 600px) {
     input[type="number"] {
-        width: 100px;
-        font-size: 16px; /* Keep font size 16px for mobile inputs */
-        padding: 8px;
+        width: 130px;
+        font-size: 16px;
+        padding: 12px;
     }
 }
 
@@ -61,6 +76,7 @@ input[type="number"] {
     padding: 10px;
     background-color: #f0f0f0;
     border-radius: 4px;
+    font-size: 16px;
 }
 
 .section-header {
@@ -89,7 +105,7 @@ input[type="number"] {
 
 @media (max-width: 600px) {
     .button-group button {
-        padding: 10px 16px;
+        padding: 15px 20px;
         width: 50%;
     }
 }
@@ -102,6 +118,7 @@ input[type="number"] {
 #instructions {
     line-height: 1.6;
     margin-top: 30px;
+    font-size: 16px;
 }
 
 #instructions h3 {
@@ -114,6 +131,7 @@ input[type="number"] {
 #instructions p {
     margin-bottom: 15px;
     margin-top: 0;
+    font-size: 16px;
 }
 
 /* Help icon and tooltip */
@@ -129,12 +147,12 @@ input[type="number"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: #666;
     color: white;
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
     position: relative;
 }
@@ -150,7 +168,7 @@ input[type="number"] {
     border-radius: 4px;
     background: #333;
     color: white;
-    font-size: 14px;
+    font-size: 16px;
     z-index: 100;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
@@ -162,7 +180,6 @@ input[type="number"] {
     }
 }
 
-
 /* Checklist styles */
 .checklist {
     margin: 15px 0;
@@ -173,20 +190,36 @@ input[type="number"] {
     align-items: flex-start;
     gap: 10px;
     margin-bottom: 12px;
-    padding: 8px;
+    padding: 12px;
     background-color: #f8f9fa;
     border-radius: 4px;
+    font-size: 16px;
 }
 
 .checkbox-item input[type="checkbox"] {
-    margin-top: 3px;
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    flex-shrink: 0; /* Prevent checkbox from shrinking */
+}
+
+@media (max-width: 600px) {
+    .checkbox-item {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+        width: 28px;
+        height: 28px;
+    }
+}
+
 }
 
 /* Counter styles */
 .repeat-counter {
-    display: flex;
+    display: inline-flex; /* Changed to inline-flex */
     align-items: center;
     gap: 12px;
     margin: 15px 0 20px 0;
@@ -195,52 +228,28 @@ input[type="number"] {
     border-radius: 4px;
     border: 1px solid #e0e0e0;
     transition: all 0.3s ease;
+    font-size: 16px;
+    width: auto; /* Ensure it doesn't take full width */
 }
 
-.repeat-counter.completed {
-    background-color: #e8f5e9;  /* Light green background */
-    border-color: #81c784;      /* Green border */
-}
-
-.repeat-counter.completed::after {
-    content: "✓";
-    color: #2e7d32;            /* Dark green checkmark */
-    margin-left: 10px;
-    font-weight: bold;
-}
-
-/* Make sure the transition is smooth */
-.repeat-counter {
-    display: flex;
+.repeat-counter > * {
+    margin: 0 6px; /* Add horizontal spacing between elements */
+    display: inline-flex;
     align-items: center;
-    gap: 12px;
-    margin: 15px 0 20px 0;
-    background-color: #f5f5f5;
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #e0e0e0;
-    transition: all 0.3s ease;  /* Smooth transition for color changes */
 }
 
 .counter-btn {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     border: 1px solid #ccc;
     border-radius: 50%;
     background: #fff;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
     touch-action: manipulation;
-}
-
-@media (max-width: 600px) {
-    .counter-btn {
-        width: 44px; /* Larger touch target on mobile */
-        height: 44px;
-    }
 }
 
 .counter-value {
@@ -248,9 +257,22 @@ input[type="number"] {
     text-align: center;
     font-size: 18px;
     font-weight: bold;
+    display: inline-block;
 }
 
-/* Add sticky navigation for mobile */
+.counter-total {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.counter-total span {
+    margin-right: 6px;
+}
+
+
+
+/* Mobile improvements */
 @media (max-width: 600px) {
     .section-header {
         position: sticky;
@@ -261,20 +283,18 @@ input[type="number"] {
         margin-top: 15px;
     }
 
-    /* Add more spacing between sections for better readability */
     #instructions > div {
         margin-bottom: 30px;
     }
 
-    /* Make checkboxes easier to tap */
-    .checkbox-item {
-        padding: 12px;
-    }
-
-    /* Improve counter readability */
-    .repeat-counter {
+     .repeat-counter {
         padding: 15px;
         margin: 20px 0;
+    }
+
+    .counter-btn {
+        width: 48px;
+        height: 48px;
     }
 }
 
