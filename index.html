@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adams sockkalkylator</title>
+    <meta charset="UTF-8">
+    <style>
+        body { 
+            font-family: Inter, sans-serif;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            padding: 5px;
+            width: 100px;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 5px;
+            background-color: #f0f0f0;
+        }
+        .required:after {
+            content: "";
+            color: red;
+        }
+        .unit {
+            color: #666;
+            font-size: 0.9em;
+            margin-left: 5px;
+        }
+        .section-header {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .button-group button {
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        .dynamic {
+            color: #0066cc;
+            font-weight: bold;
+        }
+        #instructions {
+            line-height: 1.5;
+            margin-top: 30px;
+        }
+        #instructions h3 {
+            margin-top: 25px;
+		margin-bottom: 6px;
+            color: #333;
+        }
+        #instructions p {
+            margin-bottom: 15px;
+		margin-top: 0;
+        }
+.label-with-help {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.input-with-unit {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.help-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #666;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.help-icon:hover {
+    background: #333;
+}
+
+.help-text {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: max-content;
+    max-width: 300px;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    background: #333;
+    color: white;
+    font-size: 14px;
+    z-index: 1;
+}
+
+.help-icon.active + .help-text {
+    display: block;
+}
+
+.checklist {
+    margin: 10px 0;
+    padding-left: 0px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-top: 3px;  /* Align checkbox with text */
+}
+
+.checkbox-text {
+    line-height: 1.4;
+}
+
+/* Optional: Style for checked items */
+.checkbox-item input[type="checkbox"]:checked + .checkbox-text {
+    color: #666;
+    text-decoration: line-through;
+}
+
+
+.repeat-counter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0 20px 0;
+    background-color: #f5f5f5;  /* Light gray background by default */
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;  /* Smooth transition for color changes */
+}
+
+
+.repeat-counter.completed {
+    background-color: #e8f5e9;  /* Green background when completed */
+    border-color: #81c784;
+}
+
+.repeat-counter.completed::after {
+    content: "✓";
+    color: #2e7d32;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.counter-btn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.counter-btn:hover {
+    background: #f0f0f0;
+}
+
+.counter-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.counter-value {
+    min-width: 30px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.counter-total {
+    color: #666;
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <h1>Adams sockkalkylator</h1>
+    <p>Sticka sockor anpassade för just dina–eller någon annan lyckligs–fötter.</p>
+
+    <form id="sockCalculator">
+        <div class="section-header">Mått som behövs för mönstret</div>
+   
+<div class="form-group">
+    <div class="label-with-help">
+        <label class="required">Maskor per cm</label>
+        <span class="help-icon" role="button" tabindex="0">?</span>
+        <div class="help-text">Du kan utgå ifrån stickfastheten på garnet tills du har stickat så långt att du kan räkna antalet maskor per cm på ditt eget verk.</div>
+    </div>
+    <div class="input-with-unit">
+        <input type="number" id="stitchesPerCm" step="0.1" required>
+        <span class="unit">maskor/cm</span>
+    </div>
+</div>
+
+
+  <div class="form-group">
+    <div class="label-with-help">
+        <label class="required">Varv per cm</label>
+        <span class="help-icon" role="button" tabindex="0">?</span>
+        <div class="help-text">Du kan utgå ifrån stickfastheten på garnet tills du har stickat så långt att du kan räkna antalet varv per cm på ditt eget verk.</div>
+    </div>
+    <div class="input-with-unit">
+        <input type="number" id="rowsPerCm" step="0.1" required>
+        <span class="unit">varv/cm</span>
+    </div>
+</div>
+
+
+        <div class="form-group">
+            <label class="required">Fotens omkrets</label>
+            <input type="number" id="footCircumference" step="0.1" required>
+            <span class="unit">cm</span>
+        </div>
+
+        <div class="form-group">
+            <label class="required">Fotens längd</label>
+            <input type="number" id="footLength" step="0.1" required>
+            <span class="unit">cm</span>
+        </div>
+
+        <div class="button-group">
+            <button type="button" onclick="calculate()">Beräkna</button>
+            <button type="button" onclick="resetForm()">Återställ</button>
+        </div>
+
+        <div id="results" style="margin-top: 20px;">
+            <div class="section-header">Resultat</div>
+            <div class="result">Maskor att lägga upp: <span id="totalCastOn">0</span></div>
+            <div class="result">Maskor per sticka (efter ökningar): <span id="perNeedle">0</span></div>
+            <div class="result">Maskor efter ökningar: <span id="totalAfterIncrease">0</span></div>
+            <div class="result">Ökningar per hälkil: <span id="gussetIncrease">0</span></div>
+            <div class="result">Extra ökningar sista varvet på hälkilen: <span id="gussetExpand">0</span></div>
+            <div class="result">Lindade maskor per sida: <span id="heelWrap">0</span></div>
+            <div class="result">Centrala hälmaskor: <span id="centralHeel">0</span></div>
+            <div class="result">Fotlängd när hälkilen börjar: <span id="lengthBeforeGusset">0</span> cm</div>
+        </div>
+    </form>
+
+    <div id="instructions">
+
+        <div class="section-header">Beskrivning</div>
+        
+        <h3>Tån</h3>
+     <div class="checklist" id="cast-on-checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="cast-on-1">
+        <span class="checkbox-text">Lägg upp <span class="dynamic" id="d_castOn">0</span> maskor med Judy's Magic Cast-on, <span class="dynamic" id="d_castOnPerNeedle">0</span> per sticka.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="cast-on-2">
+        <span class="checkbox-text">Sticka första varvet rätt (alla 16 maskor).</span>
+    </label>
+</div>
+
+   <p>Öka sedan så här:</p>
+<div class="checklist" id="increase-checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="increase-1">
+        <span class="checkbox-text"><b>Varv 1:</B> 1 rm, ö1mh, rm tills 1 m kvarstår, ö1mv, 1 rm.<br>
+        Upprepa på andra stickan.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="increase-2">
+        <span class="checkbox-text"><b>Varv 2:</b> Rm utan ökningar.</span>
+    </label>
+</div>
+
+
+<p>Upprepa varv <b>1</b> och <b>2</b> tills du har <span class="dynamic" id="d_totalAfterIncrease">0</span> maskor totalt.</p>
+<div class="repeat-counter" id="toe-increases-counter">
+    <button type="button" class="counter-btn minus">-</button>
+    <span class="counter-value">0</span>
+    <button type="button" class="counter-btn plus">+</button>
+    <span class="counter-total">maskor av <span class="dynamic" id="d_totalAfterIncrease2">0</span></span>
+</div>
+
+
+
+        <h3>Foten</h3>
+        <p>Maskorna på första stickan blir ovansidan foten, de på andra stickan blir sulan.</p>
+
+<div class="checklist" id="foot-length-checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="foot-length">
+        <span class="checkbox-text">Sticka slätstickning tills strumpan mäter <span class="dynamic" id="d_lengthBeforeGusset">0</span> cm.</span>
+    </label>
+</div>
+
+
+        <h3>Ökningar för hälkilen</h3>
+        <p>Ökningarna för hälkilen görs bara på undersidan av foten. Öka efter och före första respektive sista maskan – precis som vid tårna.</p>
+       <div class="checklist" id="gusset-start-checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="gusset-1">
+        <span class="checkbox-text"><b>Varv 1:</b>
+        Rm på ovansidan foten.<br>
+        1 rm, sätt ut markör, ö1mh, rm tills 1 m återstår, ö1mv, sätt ut markör, 1 rm.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="gusset-2">
+        <span class="checkbox-text"><b>Varv 2:</b> Rm hela varvet.</span>
+    </label>
+</div>
+<p>Markörerna separerar nu de <span class="dynamic" id="d_perNeedle2">0</span> maskorna under foten från hälkilarna (som efter första varvet har en maska var).</p>
+
+
+      <p>Fortsätt med varv <b>1</b> och <b>2</b> ytterligare <span class="dynamic" id="d_gussetIncreaseMinus2">0</span> gånger:</p>
+<div class="repeat-counter" id="gusset-repeats-counter">
+    <button type="button" class="counter-btn minus">-</button>
+    <span class="counter-value">0</span>
+    <button type="button" class="counter-btn plus">+</button>
+    <span class="counter-total">varv av <span class="dynamic" id="d_gussetIncreaseMinus2_counter">0</span></span>
+</div>
+
+
+       <div class="checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="final-gusset-increase">
+        <span class="checkbox-text">Gör varv <b>1</b> (ökningsvarvet) en gång till.</span>
+    </label>
+</div>
+<p>Nu har du totalt <span class="dynamic" id="d_totalWithGusset">0</span> maskor, dvs. <span class="dynamic" id="d_perNeedle3">0</span> maskor på ovansidan, <span class="dynamic" id="d_perNeedle4">0</span> maskor under foten och <span class="dynamic" id="d_gussetIncrease">0</span> maskor i varje hälkil.</p>
+
+
+        <h3>Extra ökningar innan hälens rundning</h3>
+       <div class="checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="extra-gusset-1">
+        <span class="checkbox-text">Rm på ovansidan foten.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="extra-gusset-2">
+        <span class="checkbox-text">Rm till den andra markören, 2 rm, [ö1mh, 2 rm] <span class="dynamic" id="d_gussetExpand">0</span> gånger, 1 rm.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="extra-gusset-3">
+        <span class="checkbox-text">Rm på ovansidan foten.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="extra-gusset-4">
+        <span class="checkbox-text">1 rm, [2 rm, ö1mv] <span class="dynamic" id="d_gussetExpand2">0</span> gånger, 2 rm.</span>
+    </label>
+</div>
+
+        <p>Nu har du <span class="dynamic" id="d_totalGussetIncrease">0</span> maskor i varje hälkil och är positionerad att börja sticka hälens rundning under foten (du står mellan högra hälkilen och undersidan av foten).</p>
+
+        <h3>Hälens rundning (förstärkt)</h3>
+        <p>Det här mönstret är för att sticka en förstärkt häl. Om du vill ha en slätstickad häl så stickar du bara alla maskor rätt på rätsidan.</p>
+
+        <p>Nu ska du bara arbeta fram och tillbaka med de <span class="dynamic" id="d_perNeedle5">0</span> maskorna under foten (innanför stickmarkörerna).</p>
+
+     <div class="checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-turn-1">
+        <span class="checkbox-text"><b>Varv 1 (rätsida):</b> [1 rm, lyft 1 m] till 2 maskor före markören, linda och vänd.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-turn-2">
+        <span class="checkbox-text"><b>Varv 2 (avigsida):</b> Am till två maskor före markören, linda och vänd.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-turn-3">
+        <span class="checkbox-text"><b>Varv 3:</b> 1 rm, [lyft 1 m, 1 rm] till 3 maskor före markören, linda och vänd.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-turn-4">
+        <span class="checkbox-text"><b>Varv 4:</b> Am till 3 maskor före markören, linda och vänd.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-turn-5">
+        <span class="checkbox-text"><b>Varv 5:</b> Lyft 1 m, [1 rm, lyft 1 m] till 4 maskor före markören, linda och vänd.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-turn-6">
+        <span class="checkbox-text"><b>Varv 6:</b> Am till 4 maskor före markören, linda och vänd.</span>
+    </label>
+</div>
+
+        <div class="checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-turn-repeat">
+        <span class="checkbox-text">Fortsätt sticka varv <b>3</b> till <b>6</b> men linda och vänd en maska längre ifrån markören varje gång tills du har <span class="dynamic" id="d_heelWrapPlusOne">0</span> maskor på varje sida, <span class="dynamic" id="d_heelWrap2">0</span> lindade, den yttersta maskan olindad och <span class="dynamic" id="d_centralHeel">0</span> maskor i mitten.</span>
+    </label>
+</div>
+<p>Du har precis stickat ett avigt varv.</p>
+
+
+   <div class="checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-wrap-right">
+        <span class="checkbox-text">Fortsätt med den förstärkta hälen på (rm + lyft 1 m) tills du kommer till den första lindade maskan. Plocka upp omslaget och sticka ihop dem rätt i bakre maskbågen. Gör så med alla lindade maskor förutom den sista. SSK den sista lindade maskan med sitt omslag och efterföljande maska. Vänd.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-wrap-wrong">
+        <span class="checkbox-text">Lyft 1 m, am till den första lindade maskan. Plocka upp omslaget och sticka ihop dem avigt. Gör så med alla lindade maskor förutom den sista. Sticka den sista lindade maskan med sitt omslag och efterföljande maska tillsammans avigt. Vänd.</span>
+    </label>
+</div>
+
+
+        <p>Nu har du <span class="dynamic" id="d_perNeedleMinus2">0</span> maskor under foten, <b>2</b> färre än när du började.</p>
+
+        <h3>Hällappen (förstärkt)</h3>
+  <div class="checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-flap-1">
+        <span class="checkbox-text"><b>Varv 1 (rätsida):</b> Lyft 1 m, [1 rm, lyft 1 m] till 1 maska före markören. Ta bort markören, SSK, vänd.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-flap-2">
+        <span class="checkbox-text"><b>Varv 2 (avigsida):</b> Lyft 1 m, am till 1 maska före markören. Ta bort markören, 2 am tillsammans, vänd.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-flap-3">
+        <span class="checkbox-text"><b>Varv 3:</b> Lyft 1 m, [1 rm, lyft 1 m] till 1 maska före hålet. SSK och vänd.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-flap-4">
+        <span class="checkbox-text"><b>Varv 4:</b> Lyft 1 m, am till 1 maska före hålet. 2 am tillsammans och vänd.</span>
+    </label>
+</div>
+
+
+<div class="checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="heel-flap-repeat">
+        <span class="checkbox-text">Upprepa varv <b>3</b> och <b>4</b> tills det är <b>2</b> maskor utanför vardera hål.</span>
+    </label>
+</div>
+
+
+<p>Nu har du precis gjort ett avigt varv och har totalt <span class="dynamic" id="d_perNeedlePlus2">0</span> maskor under foten och i hälkilarna (på andra stickan).</p>
+
+        <h3>Benet</h3>
+        <p>Nu ska du sticka runt igen.</p>
+
+<div class="checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="leg-start-1">
+        <span class="checkbox-text">Fortsätt med den förstärkta hälen över baksidan till 1 maska före hålet. SSK, 1 rm.</span>
+    </label>
+</div>
+
+
+        <p>Nästa varv:</p>
+
+        <div class="checklist">
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="leg-start-2">
+        <span class="checkbox-text">Rm över framsidan benet.</span>
+    </label>
+    <label class="checkbox-item">
+        <input type="checkbox" data-step="leg-start-3">
+        <span class="checkbox-text">1 rm, 2 rm tillsammans, rm över baksidan av benet.</span>
+    </label>
+</div>
+
+        <p>Nu har du rätt antal maskor igen: <span class="dynamic" id="d_perNeedle6">0</span> maskor per sticka och <span class="dynamic" id="d_totalAfterIncrease2">0</span> maskor totalt.</p>
+
+        <p>Fortsätt att sticka benet och mudden i valfri längd.</p>
+    </div>
+
+
+
+
+<script>
+    function saveFormValues() {
+        try {
+            const values = {
+                stitchesPerCm: document.getElementById('stitchesPerCm').value,
+                rowsPerCm: document.getElementById('rowsPerCm').value,
+                footCircumference: document.getElementById('footCircumference').value,
+                footLength: document.getElementById('footLength').value
+            };
+            localStorage.setItem('sockCalculatorValues', JSON.stringify(values));
+            console.log('Values saved:', values);
+        } catch (e) {
+            console.error('Error saving form values:', e);
+        }
+    }
+
+   function loadFormValues() {
+    try {
+        const savedValues = localStorage.getItem('sockCalculatorValues');
+        console.log('Retrieved values:', savedValues);
+        if (savedValues) {
+            const values = JSON.parse(savedValues);
+            
+            // Check if elements exist before trying to set values
+            const stitchesInput = document.getElementById('stitchesPerCm');
+            const rowsInput = document.getElementById('rowsPerCm');
+            const circumferenceInput = document.getElementById('footCircumference');
+            const lengthInput = document.getElementById('footLength');
+
+            if (stitchesInput && rowsInput && circumferenceInput && lengthInput) {
+                stitchesInput.value = values.stitchesPerCm || '';
+                rowsInput.value = values.rowsPerCm || '';
+                circumferenceInput.value = values.footCircumference || '';
+                lengthInput.value = values.footLength || '';
+                
+                // Only calculate if we have all values
+                if (values.stitchesPerCm && values.rowsPerCm && 
+                    values.footCircumference && values.footLength) {
+                    // Ensure calculate function exists
+                    if (typeof calculate === 'function') {
+                        calculate();
+                    }
+                }
+            }
+        }
+    } catch (e) {
+        console.error('Error loading form values:', e);
+    }
+}
+
+
+    function saveCheckboxStates() {
+        const checkboxStates = {};
+        document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
+            checkboxStates[checkbox.dataset.step] = checkbox.checked;
+        });
+        localStorage.setItem('sockCalculatorCheckboxes', JSON.stringify(checkboxStates));
+    }
+
+    function loadCheckboxStates() {
+        const savedStates = localStorage.getItem('sockCalculatorCheckboxes');
+        if (savedStates) {
+            const checkboxStates = JSON.parse(savedStates);
+            document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
+                if (checkbox.dataset.step in checkboxStates) {
+                    checkbox.checked = checkboxStates[checkbox.dataset.step];
+                }
+            });
+        }
+    }
+
+function resetForm() {
+    try {
+        // Reset form inputs
+        document.getElementById('sockCalculator').reset();
+        
+        // Clear localStorage
+        localStorage.removeItem('sockCalculatorValues');
+        localStorage.removeItem('sockCalculatorCheckboxes');
+        
+        // Reset toe increases counter
+        const toeCounter = document.getElementById('toe-increases-counter');
+        if (toeCounter) {
+            localStorage.removeItem('sockCalculator_toe-increases-counter');
+            const toeValueSpan = toeCounter.querySelector('.counter-value');
+            if (toeValueSpan) {
+                toeValueSpan.textContent = '0';
+            }
+            toeCounter.classList.remove('completed');
+            const toeStitchesElement = document.getElementById('toe_increases_stitches');
+            if (toeStitchesElement) {
+                toeStitchesElement.textContent = '0';
+            }
+        }
+
+        // Reset gusset repeats counter
+        const gussetCounter = document.getElementById('gusset-repeats-counter');
+        if (gussetCounter) {
+            localStorage.removeItem('sockCalculator_gusset-repeats-counter');
+            const gussetValueSpan = gussetCounter.querySelector('.counter-value');
+            if (gussetValueSpan) {
+                gussetValueSpan.textContent = '0';
+            }
+            gussetCounter.classList.remove('completed');
+        }
+        
+        // Reset all result values
+        const resultElements = document.querySelectorAll('#results .dynamic');
+        resultElements.forEach(element => element.textContent = '0');
+        
+        // Reset all instruction dynamic values
+        const instructionElements = document.querySelectorAll('#instructions .dynamic');
+        instructionElements.forEach(element => element.textContent = '0');
+        
+        // Reset checkboxes
+        document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        
+    } catch (e) {
+        console.error('Error resetting form:', e);
+    }
+}
+
+
+
+
+
+
+
+function calculate() {
+    const stitchesPerCm = parseFloat(document.getElementById('stitchesPerCm').value);    // c
+    const rowsPerCm = parseFloat(document.getElementById('rowsPerCm').value);            // d
+    const footCircumference = parseFloat(document.getElementById('footCircumference').value);  // a
+    const footLength = parseFloat(document.getElementById('footLength').value);          // b
+
+    if (!stitchesPerCm || !footCircumference || !rowsPerCm || !footLength) {
+        alert('Vänligen fyll i alla obligatoriska fält (Please fill in all required fields)');
+        return;
+    }
+
+    // Calculate total stitches for foot (e)
+    // a × c × 0.9, rounded to multiple of 4
+    const totalAfterIncrease = Math.round((footCircumference * stitchesPerCm * 0.9) / 4) * 4;
+
+    // Calculate stitches per needle (f)
+    // e / 6 rounded to nearest even number
+    const castOnPerNeedle = Math.round(totalAfterIncrease / 6);
+    const totalCastOn = castOnPerNeedle * 2;
+
+    // Calculate stitches per side
+    const perNeedle = totalAfterIncrease / 2;
+
+    // Calculate gusset increases per side (h)
+    // e / 2 / 2
+    const gussetIncrease = totalAfterIncrease / 4;
+
+    // Calculate extra increases for last row
+    // h / 2.5 rounded to nearest integer
+    const gussetExpand = Math.round(gussetIncrease / 2.5);
+
+    // Calculate wrapped stitches per side
+    // (e × 0.3) rounded up, minus 2, divided by 2, rounded down
+    const heelWrap = Math.floor((Math.ceil(totalAfterIncrease * 0.3) - 2) / 2);
+
+    // Calculate central heel stitches
+    const centralHeel = Math.max(((totalAfterIncrease / 2) - (heelWrap + 1) * 2), 0);
+
+    // Calculate length before gusset
+    // b - (e × 0.75 / d) - 0.75
+    const lengthBeforeGusset = Math.ceil((footLength - (totalAfterIncrease * 0.75 / rowsPerCm) - 0.75) * 2) / 2;
+
+    // Update results
+    document.getElementById('totalCastOn').textContent = totalCastOn;
+    document.getElementById('perNeedle').textContent = perNeedle;
+    document.getElementById('totalAfterIncrease').textContent = totalAfterIncrease;
+    document.getElementById('gussetIncrease').textContent = gussetIncrease;
+    document.getElementById('gussetExpand').textContent = gussetExpand;
+    document.getElementById('heelWrap').textContent = heelWrap;
+    document.getElementById('centralHeel').textContent = centralHeel;
+    document.getElementById('lengthBeforeGusset').textContent = lengthBeforeGusset.toFixed(1);
+
+    updateInstructions();
+    saveFormValues();
+
+    // Update counter if it exists
+    const valueSpan = document.querySelector('.counter-value');
+    if (valueSpan) {
+        initializeCounter();
+    }
+}
+
+
+ function updateInstructions() {
+    try {
+        const totalCastOn = document.getElementById('totalCastOn') ? document.getElementById('totalCastOn').textContent : '0';
+        const perNeedle = document.getElementById('perNeedle') ? document.getElementById('perNeedle').textContent : '0';
+        const totalAfterIncrease = document.getElementById('totalAfterIncrease') ? document.getElementById('totalAfterIncrease').textContent : '0';
+        const gussetIncrease = document.getElementById('gussetIncrease') ? document.getElementById('gussetIncrease').textContent : '0';
+        const gussetExpand = document.getElementById('gussetExpand') ? document.getElementById('gussetExpand').textContent : '0';
+        const heelWrap = document.getElementById('heelWrap') ? document.getElementById('heelWrap').textContent : '0';
+        const centralHeel = document.getElementById('centralHeel') ? document.getElementById('centralHeel').textContent : '0';
+        const lengthBeforeGusset = document.getElementById('lengthBeforeGusset') ? document.getElementById('lengthBeforeGusset').textContent : '0';
+
+        // Safe update function
+        function updateElement(id, value) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+            }
+        }
+
+        updateElement('d_castOn', totalCastOn);
+        updateElement('d_castOnPerNeedle', totalCastOn / 2);
+        updateElement('d_perNeedle', perNeedle);
+        updateElement('d_totalAfterIncrease', totalAfterIncrease);
+        updateElement('d_lengthBeforeGusset', lengthBeforeGusset);
+        updateElement('d_perNeedle2', perNeedle);
+        updateElement('d_gussetIncreaseMinus2', parseInt(gussetIncrease) - 2);
+        updateElement('d_totalWithGusset', parseInt(totalAfterIncrease) + parseInt(gussetIncrease));
+        updateElement('d_perNeedle3', perNeedle);
+        updateElement('d_perNeedle4', perNeedle);
+        updateElement('d_gussetIncrease', gussetIncrease);
+        updateElement('d_gussetExpand', gussetExpand);
+        updateElement('d_gussetExpand2', gussetExpand);
+        updateElement('d_totalGussetIncrease', parseInt(gussetIncrease) + parseInt(gussetExpand));
+	updateElement('d_gussetIncreaseMinus2_counter', parseInt(gussetIncrease) - 2);
+        updateElement('d_perNeedle5', perNeedle);
+        updateElement('d_heelWrapPlusOne', parseInt(heelWrap) + 1);
+        updateElement('d_heelWrap2', heelWrap);
+        updateElement('d_centralHeel', centralHeel);
+        updateElement('d_perNeedleMinus2', parseInt(perNeedle) - 2);
+        updateElement('d_perNeedlePlus2', parseInt(perNeedle) + 2);
+        updateElement('d_perNeedle6', perNeedle);
+        updateElement('d_totalAfterIncrease2', totalAfterIncrease);
+    } catch (e) {
+        console.error('Error updating instructions:', e);
+    }
+}
+
+function initializeCounter() {
+    document.querySelectorAll('.repeat-counter').forEach(counter => {
+        const minusBtn = counter.querySelector('.counter-btn.minus');
+        const plusBtn = counter.querySelector('.counter-btn.plus');
+        const valueSpan = counter.querySelector('.counter-value');
+        const counterId = counter.id;
+        
+        if (!minusBtn || !plusBtn || !valueSpan) return;
+
+        if (counterId === 'toe-increases-counter') {
+            // Toe increases counter
+            const totalCastOnElement = document.getElementById('totalCastOn');
+            const totalCastOn = totalCastOnElement ? parseInt(totalCastOnElement.textContent) : 0;
+            let stitchCount = parseInt(localStorage.getItem(`sockCalculator_${counterId}`) || totalCastOn.toString());
+            
+            if (valueSpan) {
+                valueSpan.textContent = stitchCount;
+            }
+
+            function updateButtons() {
+                const targetElement = document.getElementById('d_totalAfterIncrease');
+                const targetStitches = targetElement ? parseInt(targetElement.textContent) : 0;
+                
+                if (minusBtn) minusBtn.disabled = stitchCount <= totalCastOn;
+                if (plusBtn) plusBtn.disabled = stitchCount >= targetStitches;
+                
+                if (stitchCount >= targetStitches) {
+                    counter.classList.add('completed');
+                } else {
+                    counter.classList.remove('completed');
+                }
+
+                const stitchesElement = document.getElementById('toe_increases_stitches');
+                if (stitchesElement) {
+                    stitchesElement.textContent = stitchCount;
+                }
+            }
+
+            function updateCounter(newCount) {
+                stitchCount = newCount;
+                if (valueSpan) {
+                    valueSpan.textContent = stitchCount;
+                }
+                localStorage.setItem(`sockCalculator_${counterId}`, stitchCount);
+                updateButtons();
+            }
+
+            if (minusBtn) {
+                minusBtn.addEventListener('click', () => {
+                    if (stitchCount > totalCastOn) {
+                        updateCounter(stitchCount - 4);
+                    }
+                });
+            }
+
+            if (plusBtn) {
+                plusBtn.addEventListener('click', () => {
+                    const targetElement = document.getElementById('d_totalAfterIncrease');
+                    const targetStitches = targetElement ? parseInt(targetElement.textContent) : 0;
+                    if (stitchCount < targetStitches) {
+                        updateCounter(stitchCount + 4);
+                    }
+                });
+            }
+
+            updateButtons();
+
+        } else if (counterId === 'gusset-repeats-counter') {
+            // Gusset repeats counter
+            let count = parseInt(localStorage.getItem(`sockCalculator_${counterId}`) || '0');
+            if (valueSpan) {
+                valueSpan.textContent = count;
+            }
+            
+            function updateButtons() {
+                const totalElement = document.getElementById('d_gussetIncreaseMinus2_counter');
+                const total = totalElement ? parseInt(totalElement.textContent) : 0;
+                
+                if (minusBtn) minusBtn.disabled = count <= 0;
+                if (plusBtn) plusBtn.disabled = count >= total;
+                
+                if (count >= total) {
+                    counter.classList.add('completed');
+                } else {
+                    counter.classList.remove('completed');
+                }
+            }
+            
+            function updateCounter(newCount) {
+                count = newCount;
+                if (valueSpan) {
+                    valueSpan.textContent = count;
+                }
+                localStorage.setItem(`sockCalculator_${counterId}`, count);
+                updateButtons();
+            }
+            
+            if (minusBtn) {
+                minusBtn.addEventListener('click', () => {
+                    if (count > 0) {
+                        updateCounter(count - 1);
+                    }
+                });
+            }
+            
+            if (plusBtn) {
+                plusBtn.addEventListener('click', () => {
+                    const totalElement = document.getElementById('d_gussetIncreaseMinus2_counter');
+                    const total = totalElement ? parseInt(totalElement.textContent) : 0;
+                    if (count < total) {
+                        updateCounter(count + 1);
+                    }
+                });
+            }
+            
+            updateButtons();
+        }
+    });
+}
+
+
+
+
+
+    // Event Listeners
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+    loadFormValues();
+    loadCheckboxStates();
+    initializeCounter();
+});
+    } else {
+        loadFormValues();
+        loadCheckboxStates();
+        initializeCounter();
+    }
+
+    // Form change listener
+    document.getElementById('sockCalculator').addEventListener('change', function() {
+        if (this.checkValidity()) {
+            calculate();
+        }
+    });
+
+    // Help icon listeners
+    document.querySelectorAll('.help-icon').forEach(icon => {
+        icon.addEventListener('click', function(e) {
+            document.querySelectorAll('.help-icon').forEach(otherIcon => {
+                if (otherIcon !== this) otherIcon.classList.remove('active');
+            });
+            this.classList.toggle('active');
+        });
+    });
+
+    // Outside click listener for tooltips
+    document.addEventListener('click', function(e) {
+        if (!e.target.classList.contains('help-icon')) {
+            document.querySelectorAll('.help-icon').forEach(icon => {
+                icon.classList.remove('active');
+            });
+        }
+    });
+
+    // Keyboard navigation for help icons
+    document.querySelectorAll('.help-icon').forEach(icon => {
+        icon.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    });
+
+    // Checkbox listeners
+    document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', saveCheckboxStates);
+    });
+
+
+    </script>
+</body>
+</html>
