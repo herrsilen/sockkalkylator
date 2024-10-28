@@ -691,7 +691,7 @@ function calculate() {
 }
 
 
- function updateInstructions() {
+function updateInstructions() {
     try {
         const totalCastOn = document.getElementById('totalCastOn') ? document.getElementById('totalCastOn').textContent : '0';
         const perNeedle = document.getElementById('perNeedle') ? document.getElementById('perNeedle').textContent : '0';
@@ -714,9 +714,11 @@ function calculate() {
         updateElement('d_castOnPerNeedle', totalCastOn / 2);
         updateElement('d_perNeedle', perNeedle);
         updateElement('d_totalAfterIncrease', totalAfterIncrease);
+        updateElement('d_totalAfterIncrease2', totalAfterIncrease); // Make sure this matches totalAfterIncrease
         updateElement('d_lengthBeforeGusset', lengthBeforeGusset);
         updateElement('d_perNeedle2', perNeedle);
         updateElement('d_gussetIncreaseMinus2', parseInt(gussetIncrease) - 2);
+        updateElement('d_gussetIncreaseMinus2_counter', parseInt(gussetIncrease) - 2);
         updateElement('d_totalWithGusset', parseInt(totalAfterIncrease) + parseInt(gussetIncrease));
         updateElement('d_perNeedle3', perNeedle);
         updateElement('d_perNeedle4', perNeedle);
@@ -724,7 +726,6 @@ function calculate() {
         updateElement('d_gussetExpand', gussetExpand);
         updateElement('d_gussetExpand2', gussetExpand);
         updateElement('d_totalGussetIncrease', parseInt(gussetIncrease) + parseInt(gussetExpand));
-	updateElement('d_gussetIncreaseMinus2_counter', parseInt(gussetIncrease) - 2);
         updateElement('d_perNeedle5', perNeedle);
         updateElement('d_heelWrapPlusOne', parseInt(heelWrap) + 1);
         updateElement('d_heelWrap2', heelWrap);
@@ -732,11 +733,11 @@ function calculate() {
         updateElement('d_perNeedleMinus2', parseInt(perNeedle) - 2);
         updateElement('d_perNeedlePlus2', parseInt(perNeedle) + 2);
         updateElement('d_perNeedle6', perNeedle);
-        updateElement('d_totalAfterIncrease2', totalAfterIncrease);
     } catch (e) {
         console.error('Error updating instructions:', e);
     }
 }
+
 
 function initializeCounter() {
     document.querySelectorAll('.repeat-counter').forEach(counter => {
