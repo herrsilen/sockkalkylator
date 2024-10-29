@@ -298,7 +298,9 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 }
 
-
+.hidden {
+	display: none;
+}
 
 
     </style>
@@ -353,7 +355,7 @@ input[type="number"]::-webkit-inner-spin-button {
             <button type="button" onclick="resetForm()">Återställ</button>
         </div>
 
-        <div id="results" style="margin-top: 20px;">
+        <div id="results" style="margin-top: 20px;" class="hidden">
             <div class="section-header">Resultat</div>
             <div class="result">Maskor att lägga upp: <span id="totalCastOn">0</span></div>
             <div class="result">Maskor per sticka (efter ökningar): <span id="perNeedle">0</span></div>
@@ -708,6 +710,9 @@ function resetForm() {
         document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
             checkbox.checked = false;
         });
+
+	// Hide results
+        document.getElementById('results').classList.add('hidden');
         
     } catch (e) {
         console.error('Error resetting form:', e);
@@ -778,6 +783,7 @@ function calculate() {
     
 
     updateInstructions();
+    document.getElementById('results').classList.remove('hidden');
     saveFormValues();
 
     // Update counter if it exists
@@ -799,6 +805,8 @@ function updateInstructions() {
         const centralHeel = document.getElementById('centralHeel') ? document.getElementById('centralHeel').textContent : '0';
         const lengthBeforeGusset = document.getElementById('lengthBeforeGusset') ? document.getElementById('lengthBeforeGusset').textContent : '0';
 
+
+	    
         // Safe update function
         function updateElement(id, value) {
             const element = document.getElementById(id);
