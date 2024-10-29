@@ -32,6 +32,12 @@ body {
 
     .section-header {
         font-size: 18px;
+	position: sticky;
+        top: 0;
+        background: white;
+        padding: 10px 0;
+        z-index: 10;
+        margin-top: 15px;
     }
 }
 
@@ -245,14 +251,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
 /* Mobile improvements */
 @media (max-width: 600px) {
-    .section-header {
-        position: sticky;
-        top: 0;
-        background: white;
-        padding: 10px 0;
-        z-index: 10;
-        margin-top: 15px;
-    }
 
     #instructions > div {
         margin-bottom: 30px;
