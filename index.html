@@ -769,10 +769,11 @@ function calculate() {
     // a × c × 0.9, rounded to multiple of 4
     const totalAfterIncrease = Math.round((footCircumference * stitchesPerCm * 0.9) / 4) * 4;
 
-    // Calculate stitches per needle (f)
-    // e / 6 rounded to nearest even number
-    const castOnPerNeedle = Math.round(totalAfterIncrease / 6);
-    const totalCastOn = castOnPerNeedle * 2;
+    // NEW CALCULATION:
+    // Work backwards from total stitches to find cast-on number
+    const numberOfIncreaseRounds = Math.floor((totalAfterIncrease - 16) / 4); // Start with minimum 16 cast-on
+    const totalCastOn = totalAfterIncrease - (numberOfIncreaseRounds * 4);
+    const castOnPerNeedle = totalCastOn / 2;
 
     // Calculate stitches per side
     const perNeedle = totalAfterIncrease / 2;
@@ -821,6 +822,7 @@ function calculate() {
         initializeCounter();
     }
 }
+
 
 
 function updateInstructions() {
