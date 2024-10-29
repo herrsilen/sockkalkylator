@@ -155,14 +155,17 @@ input[type="number"]::-webkit-inner-spin-button {
     font-size: 16px;
     cursor: pointer;
     position: relative;
+    touch-action: manipulation;
 }
 
 .help-text {
     display: none;
     position: absolute;
     top: 100%;
-    left: 0;
-    width: 300px;
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    width: calc(100vw - 40px);
+    max-width: 300px; /* Maximum width on larger screens */
     padding: 12px;
     margin-top: 8px;
     border-radius: 4px;
@@ -172,6 +175,7 @@ input[type="number"]::-webkit-inner-spin-button {
     z-index: 100;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+
 
 @media (max-width: 600px) {
     .help-text {
@@ -1036,9 +1040,30 @@ function initializeCounter() {
         }
     });
 
-    // Help icon listeners
-   document.querySelectorAll('.help-icon').forEach(icon => {
+   // Help icon listeners
+document.querySelectorAll('.help-icon').forEach(icon => {
     icon.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent click from immediately closing tooltip
+        
+        // Close all other tooltips
+        document.querySelectorAll('.help-text').forEach(tooltip => {
+            if (tooltip !== this.nextElementSibling) {
+                tooltip.style.display = 'none';
+            }
+        });
+        
+        // Toggle this tooltip
+        const tooltip = this.nextElementSibling;
+        if (tooltip.style.display === 'block') {
+            tooltip.style.display = 'none';
+        } else {
+            tooltip.style.display = 'block';
+        }
+    });
+
+    // Add touch event for mobile
+    icon.addEventListener('touchend', function(e) {
+        e.preventDefault(); // Prevent default touch behavior
         e.stopPropagation(); // Prevent click from immediately closing tooltip
         
         // Close all other tooltips
@@ -1067,15 +1092,16 @@ document.addEventListener('click', function(e) {
     }
 });
 
-    // Keyboard navigation for help icons
-    document.querySelectorAll('.help-icon').forEach(icon => {
-        icon.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.click();
-            }
-        });
+// Keyboard navigation for help icons
+document.querySelectorAll('.help-icon').forEach(icon => {
+    icon.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
+        }
     });
+});
+
 
     // Checkbox listeners
     document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
