@@ -340,8 +340,7 @@ input[type="number"]::-webkit-inner-spin-button {
     <h1>Adams sockkalkylator</h1>
     <p>Sticka sockor anpassade för just dina–eller någon annan lyckligs–fötter.</p>
 
-<h2 class="section-header">Förkortningar och tekniker i mönstret</h2>
-<button class="collapsible">Visa</button>
+<button class="collapsible">Visa förkortningar och tekniker</button>
 <div class="content">
     <ul>
         <li><a href="https://www.youtube.com/watch?v=y7MZPq928yM">Judy's Magic Cast-on</a></li>
@@ -1080,7 +1079,7 @@ document.addEventListener('click', function(e) {
 
 
 
-	// JavaScript for collapsible section
+	// Collapsible section
 const collapsible = document.querySelector(".collapsible");
 const content = document.querySelector(".content");
 
@@ -1088,10 +1087,10 @@ collapsible.addEventListener("click", function() {
     this.classList.toggle("active");
     if (content.style.display === "block") {
         content.style.display = "none";
-        this.textContent = "Visa Förkortningar och tekniker";
+        this.textContent = "Visa förkortningar och tekniker";
     } else {
         content.style.display = "block";
-        this.textContent = "Dölj Förkortningar och tekniker";
+        this.textContent = "Dölj förkortningar och tekniker";
     }
 });
 
