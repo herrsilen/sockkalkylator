@@ -134,47 +134,13 @@ input[type="number"]::-webkit-inner-spin-button {
     font-size: 16px;
 }
 
-/* Help icon and tooltip */
-.label-with-help {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    position: relative;
-    margin-bottom: 8px;
+.helper-text {
+    display: block; /* Ensure it takes a new line */
+    font-size: 14px; /* Slightly smaller than the label */
+    color: #666; /* A lighter color for the helper text */
+    margin-top: 4px; /* Space between label and helper text */
 }
 
-.help-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #666;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    position: relative;
-    touch-action: manipulation;
-}
-
-.help-text {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Center horizontally */
-    width: calc(100vw - 40px);
-    max-width: 300px; /* Maximum width on larger screens */
-    padding: 12px;
-    margin-top: 8px;
-    border-radius: 4px;
-    background: #333;
-    color: white;
-    font-size: 16px;
-    z-index: 100;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
 
 
 @media (max-width: 600px) {
@@ -367,31 +333,24 @@ input[type="number"]::-webkit-inner-spin-button {
     <form id="sockCalculator">
         <h2 class="section-header">Mått som behövs för mönstret</h2>
    
-<div class="form-group">
-    <div class="label-with-help">
-        <label class="required">Maskor per cm</label>
-        <span class="help-icon" role="button" tabindex="0">?</span>
-        <div class="help-text">Du kan utgå ifrån stickfastheten på garnet tills du har stickat så långt att du kan räkna antalet maskor per cm på ditt eget verk.</div>
-    </div>
-    <div class="input-with-unit">
-        <input type="number" id="stitchesPerCm" step="0.1" required>
-        <span class="unit">maskor/cm</span>
-    </div>
-</div>
-
-
   <div class="form-group">
-    <div class="label-with-help">
-        <label class="required">Varv per cm</label>
-        <span class="help-icon" role="button" tabindex="0">?</span>
-        <div class="help-text">Du kan utgå ifrån stickfastheten på garnet tills du har stickat så långt att du kan räkna antalet varv per cm på ditt eget verk.</div>
-    </div>
-    <div class="input-with-unit">
-        <input type="number" id="rowsPerCm" step="0.1" required>
-        <span class="unit">varv/cm</span>
-    </div>
-</div>
+            <label class="required">Maskor per cm</label>
+            <span class="helper-text">Du kan utgå ifrån stickfastheten på garnet tills du har stickat så långt att du kan räkna antalet maskor per cm på ditt eget verk.</span>
+            <div class="input-with-unit">
+                <input type="number" id="stitchesPerCm" step="0.1" required>
+                <span class="unit">maskor/cm</span>
+            </div>
+        </div>
 
+
+    <div class="form-group">
+            <label class="required">Varv per cm</label>
+            <span class="helper-text">Du kan utgå ifrån stickfastheten på garnet tills du har stickat så långt att du kan räkna antalet varv per cm på ditt eget verk.</span>
+            <div class="input-with-unit">
+                <input type="number" id="rowsPerCm" step="0.1" required>
+                <span class="unit">varv/cm</span>
+            </div>
+        </div>
 
         <div class="form-group">
             <label class="required">Fotens omkrets</label>
