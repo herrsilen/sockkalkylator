@@ -704,32 +704,45 @@ function resetForm() {
         document.getElementById('sockCalculator').reset();
         
         // Clear localStorage
-        localStorage.clear();  // Clear all localStorage
+        localStorage.clear();
         
-        // Reset toe increases counter
-        const toeCounter = document.getElementById('toe-increases-counter');
-        if (toeCounter) {
-            const toeValueSpan = toeCounter.querySelector('.counter-value');
-            if (toeValueSpan) {
-                toeValueSpan.textContent = '0';
-            }
-            toeCounter.classList.remove('completed');
-        }
+        // Reset counters to dash
+        document.querySelectorAll('.repeat-counter').forEach(counter => {
+            const valueSpan = counter.querySelector('.counter-value');
+            const totalSpan = counter.querySelector('.counter-total span');
+            const minusBtn = counter.querySelector('.counter-btn.minus');
+            const plusBtn = counter.querySelector('.counter-btn.plus');
+            
+            if (valueSpan) valueSpan.textContent = "-";
+            if (totalSpan) totalSpan.textContent = "-";
+            if (minusBtn) minusBtn.disabled = true;
+            if (plusBtn) plusBtn.disabled = true;
+            counter.classList.remove('completed');
+        });
+        
+        // Reset all result values
+        document.querySelectorAll('#results span[id]').forEach(element => {
+            element.textContent = '0';
+        });
+        
+        // Reset all instruction dynamic values
+        document.querySelectorAll('#instructions .dynamic').forEach(element => {
+            element.textContent = '0';
+        });
+        
+        // Reset checkboxes
+        document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
 
-        // Reset gusset repeats counter
-        const gussetCounter = document.getElementById('gusset-repeats-counter');
-        if (gussetCounter) {
-            const gussetValueSpan = gussetCounter.querySelector('.counter-value');
-            if (gussetValueSpan) {
-                gussetValueSpan.textContent = '0';
-            }
-            gussetCounter.classList.remove('completed');
-        }
+        // Hide results section
+        document.getElementById('results').classList.add('hidden');
+        
+    } catch (e) {
+        console.error('Error resetting form:', e);
+    }
+}
 
-	// Reset counter styles    
-	document.querySelectorAll('.repeat-counter').forEach(counter => {
-        counter.classList.remove('completed');
-    });
         
         // Reset all result values
         document.querySelectorAll('#results span[id]').forEach(element => {
