@@ -34,6 +34,8 @@ body {
     padding-bottom: 8px;
 }
 
+}
+
 @media (max-width: 600px) {
     body {
         margin: 10px;
@@ -702,21 +704,27 @@ function resetForm() {
         document.getElementById('sockCalculator').reset();
         
         // Clear localStorage
-        localStorage.clear();
+        localStorage.clear();  // Clear all localStorage
         
-        // Reset counters to dash
-        document.querySelectorAll('.repeat-counter').forEach(counter => {
-            const valueSpan = counter.querySelector('.counter-value');
-            const totalSpan = counter.querySelector('.counter-total span');
-            const minusBtn = counter.querySelector('.counter-btn.minus');
-            const plusBtn = counter.querySelector('.counter-btn.plus');
-            
-            if (valueSpan) valueSpan.textContent = "-";
-            if (totalSpan) totalSpan.textContent = "-";
-            if (minusBtn) minusBtn.disabled = true;
-            if (plusBtn) plusBtn.disabled = true;
-            counter.classList.remove('completed');
-        });
+        // Reset toe increases counter
+        const toeCounter = document.getElementById('toe-increases-counter');
+        if (toeCounter) {
+            const toeValueSpan = toeCounter.querySelector('.counter-value');
+            if (toeValueSpan) {
+                toeValueSpan.textContent = '0';
+            }
+            toeCounter.classList.remove('completed');
+        }
+
+        // Reset gusset repeats counter
+        const gussetCounter = document.getElementById('gusset-repeats-counter');
+        if (gussetCounter) {
+            const gussetValueSpan = gussetCounter.querySelector('.counter-value');
+            if (gussetValueSpan) {
+                gussetValueSpan.textContent = '0';
+            }
+            gussetCounter.classList.remove('completed');
+        }
         
         // Reset all result values
         document.querySelectorAll('#results span[id]').forEach(element => {
@@ -728,7 +736,7 @@ function resetForm() {
             element.textContent = '0';
         });
         
-        // Reset checkboxes
+        // Reset checkboxes and force update
         document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
             checkbox.checked = false;
         });
@@ -740,6 +748,10 @@ function resetForm() {
         console.error('Error resetting form:', e);
     }
 }
+
+
+
+
 
 
 function calculate() {
@@ -868,129 +880,122 @@ function initializeCounter() {
         const minusBtn = counter.querySelector('.counter-btn.minus');
         const plusBtn = counter.querySelector('.counter-btn.plus');
         const valueSpan = counter.querySelector('.counter-value');
-        const totalSpan = counter.querySelector('.counter-total span');
         const counterId = counter.id;
         
         if (!minusBtn || !plusBtn || !valueSpan) return;
 
-        // Initially set to dash
-        valueSpan.textContent = "-";
-        if (totalSpan) {
-            totalSpan.textContent = "-";
-        }
-        minusBtn.disabled = true;
-        plusBtn.disabled = true;
-
         if (counterId === 'toe-increases-counter') {
-            let stitchCount = 0;
+            // Toe increases counter
+            const totalCastOnElement = document.getElementById('totalCastOn');
+            const totalCastOn = totalCastOnElement ? parseInt(totalCastOnElement.textContent) : 0;
+            let stitchCount = parseInt(localStorage.getItem(`sockCalculator_${counterId}`) || (totalCastOn + 4).toString());
             
+            if (valueSpan) {
+                valueSpan.textContent = stitchCount;
+            }
+
             function updateButtons() {
                 const targetElement = document.getElementById('d_totalAfterIncrease');
                 const targetStitches = targetElement ? parseInt(targetElement.textContent) : 0;
+		const initialValue = totalCastOn + 4;
                 
-                if (targetStitches > 0) {
-                    // Only show actual numbers if calculation has been done
-                    valueSpan.textContent = stitchCount;
-                    if (totalSpan) {
-                        totalSpan.textContent = targetStitches;
-                    }
-                    
-                    minusBtn.disabled = stitchCount <= 0;
-                    plusBtn.disabled = stitchCount >= targetStitches;
-                    
-                    if (stitchCount >= targetStitches) {
-                        counter.classList.add('completed');
-                    } else {
-                        counter.classList.remove('completed');
-                    }
-                }
-            }
+                 if (minusBtn) minusBtn.disabled = stitchCount <= initialValue;  // Changed condition here
+    if (plusBtn) plusBtn.disabled = stitchCount >= targetStitches;
+    
+    if (stitchCount >= targetStitches) {
+        counter.classList.add('completed');
+    } else {
+        counter.classList.remove('completed');
+    }
+
+    const stitchesElement = document.getElementById('toe_increases_stitches');
+    if (stitchesElement) {
+        stitchesElement.textContent = stitchCount;
+    }
+}
 
             function updateCounter(newCount) {
                 stitchCount = newCount;
-                valueSpan.textContent = stitchCount;
+                if (valueSpan) {
+                    valueSpan.textContent = stitchCount;
+                }
                 localStorage.setItem(`sockCalculator_${counterId}`, stitchCount);
                 updateButtons();
             }
 
-            // Load saved value if exists and calculation has been done
-            const savedCount = localStorage.getItem(`sockCalculator_${counterId}`);
-            if (savedCount && document.getElementById('d_totalAfterIncrease').textContent !== '0') {
-                stitchCount = parseInt(savedCount);
-                updateButtons();
+            if (minusBtn) {
+                minusBtn.addEventListener('click', () => {
+                    if (stitchCount > totalCastOn) {
+                        updateCounter(stitchCount - 4);
+                    }
+                });
             }
 
-            minusBtn.addEventListener('click', () => {
-                if (stitchCount > 0) {
-                    updateCounter(stitchCount - 4);
-                }
-            });
-
-            plusBtn.addEventListener('click', () => {
-                const targetStitches = parseInt(document.getElementById('d_totalAfterIncrease').textContent);
-                if (stitchCount < targetStitches) {
-                    updateCounter(stitchCount + 4);
-                }
-            });
+            if (plusBtn) {
+                plusBtn.addEventListener('click', () => {
+                    const targetElement = document.getElementById('d_totalAfterIncrease');
+                    const targetStitches = targetElement ? parseInt(targetElement.textContent) : 0;
+                    if (stitchCount < targetStitches) {
+                        updateCounter(stitchCount + 4);
+                    }
+                });
+            }
 
             updateButtons();
 
         } else if (counterId === 'gusset-repeats-counter') {
-            let count = 0;
+            // Gusset repeats counter
+            let count = parseInt(localStorage.getItem(`sockCalculator_${counterId}`) || '0');
+            if (valueSpan) {
+                valueSpan.textContent = count;
+            }
             
             function updateButtons() {
                 const totalElement = document.getElementById('d_gussetIncreaseMinus2_counter');
                 const total = totalElement ? parseInt(totalElement.textContent) : 0;
                 
-                if (total > 0) {
-                    // Only show actual numbers if calculation has been done
-                    valueSpan.textContent = count;
-                    if (totalSpan) {
-                        totalSpan.textContent = total;
-                    }
-                    
-                    minusBtn.disabled = count <= 0;
-                    plusBtn.disabled = count >= total;
-                    
-                    if (count >= total) {
-                        counter.classList.add('completed');
-                    } else {
-                        counter.classList.remove('completed');
-                    }
+                if (minusBtn) minusBtn.disabled = count <= 0;
+                if (plusBtn) plusBtn.disabled = count >= total;
+                
+                if (count >= total) {
+                    counter.classList.add('completed');
+                } else {
+                    counter.classList.remove('completed');
                 }
             }
             
             function updateCounter(newCount) {
                 count = newCount;
-                valueSpan.textContent = count;
+                if (valueSpan) {
+                    valueSpan.textContent = count;
+                }
                 localStorage.setItem(`sockCalculator_${counterId}`, count);
                 updateButtons();
             }
             
-            // Load saved value if exists and calculation has been done
-            const savedCount = localStorage.getItem(`sockCalculator_${counterId}`);
-            if (savedCount && document.getElementById('d_gussetIncreaseMinus2_counter').textContent !== '0') {
-                count = parseInt(savedCount);
-                updateButtons();
+            if (minusBtn) {
+                minusBtn.addEventListener('click', () => {
+                    if (count > 0) {
+                        updateCounter(count - 1);
+                    }
+                });
             }
-
-            minusBtn.addEventListener('click', () => {
-                if (count > 0) {
-                    updateCounter(count - 1);
-                }
-            });
-
-            plusBtn.addEventListener('click', () => {
-                const total = parseInt(document.getElementById('d_gussetIncreaseMinus2_counter').textContent);
-                if (count < total) {
-                    updateCounter(count + 1);
-                }
-            });
+            
+            if (plusBtn) {
+                plusBtn.addEventListener('click', () => {
+                    const totalElement = document.getElementById('d_gussetIncreaseMinus2_counter');
+                    const total = totalElement ? parseInt(totalElement.textContent) : 0;
+                    if (count < total) {
+                        updateCounter(count + 1);
+                    }
+                });
+            }
             
             updateButtons();
         }
     });
 }
+
 
 
 
