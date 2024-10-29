@@ -332,6 +332,34 @@ input[type="number"]::-webkit-inner-spin-button {
     margin-bottom: 20px;
 }
 
+.collapsible-container {
+    border: 1px solid #ccc; /* Border around the entire container */
+    border-radius: 4px; /* Rounded corners */
+    margin-bottom: 20px; /* Space below the container */
+    overflow: hidden; /* Ensure that content does not overflow the border */
+}
+
+.collapsible {
+    background-color: #f1f1f1; /* Background color for the button */
+    color: #444; /* Text color */
+    border: none; /* Remove default button border */
+    text-align: left; /* Align text to the left */
+    outline: none; /* Remove outline */
+    font-size: 16px; /* Font size */
+    width: 100%; /* Make button full width */
+    padding: 10px; /* Padding for the button */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+.collapsible:hover {
+    background-color: #e0e0e0; /* Background color on hover */
+}
+
+.content {
+    padding: 10px; /* Padding for the content */
+    display: none; /* Hidden by default */
+    background-color: #f9f9f9; /* Background color for the content */
+}
 
 
     </style>
@@ -342,25 +370,33 @@ input[type="number"]::-webkit-inner-spin-button {
 
 <button class="collapsible" id="toggleButton">
     Förkortningar och tekniker
-	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
-        <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/>
-    </svg>
 </button>
 	
-<div class="content">
-    <ul>
-        <li><a href="https://www.youtube.com/watch?v=y7MZPq928yM">Judy's Magic Cast-on</a></li>
-        <li>m = maska</li>
-        <li>rm = rät maska</li>
-        <li>am = avig maska</li>
-        <li><a href="https://www.youtube.com/watch?v=4x4l1JKXqcU">ö1mh = öka 1 maska högerlutande</a></li>
-        <li><a href="https://www.youtube.com/watch?v=v0K0NHlYVyU">ö1mv = öka 1 maska vänsterlutande</a></li>
-        <li><a href="https://www.youtube.com/watch?v=wXl4ugwKZBM">linda (och vänd)</a></li>
-        <li><a href="https://www.youtube.com/watch?v=GXBSmedZXfY">SSK = slip slip knit</a></li>
-        <li><a href="https://www.youtube.com/watch?v=6LC8aPIfNk4">2 am tillsammans</a></li>
-        <li><a href="https://www.youtube.com/watch?v=IA6sj3d1ztw">2 rm tillsammans</a></li>
-    </ul>
+<div class="collapsible-container">
+    <button class="collapsible" id="toggleButton">
+        <svg id="toggleIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+            <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/>
+        </svg>
+        Förkortningar och tekniker
+    </button>
+    <div class="content">
+        <ul>
+            <li><a href="https://www.youtube.com/watch?v=y7MZPq928yM">Judy's Magic Cast-on</a></li>
+            <li>m = maska</li>
+            <li>rm = rät maska</li>
+            <li>am = avig maska</li>
+            <li><a href="https://www.youtube.com/watch?v=4x4l1JKXqcU">ö1mh = öka 1 maska högerlutande</a></li>
+            <li><a href="https://www.youtube.com/watch?v=v0K0NHlYVyU">ö1mv = öka 1 maska vänsterlutande</a></li>
+            <li><a href="https://www.youtube.com/watch?v=wXl4ugwKZBM">linda (och vänd)</a></li>
+            <li><a href="https://www.youtube.com/watch?v=GXBSmedZXfY">SSK = slip slip knit</a></li>
+            <li><a href="https://www.youtube.com/watch?v=6LC8aPIfNk4">2 am tillsammans</a></li>
+            <li><a href="https://www.youtube.com/watch?v=IA6sj3d1ztw">2 rm tillsammans</a></li>
+        </ul>
+    </div>
 </div>
+
+
+	
     <form id="sockCalculator">
         <h2 class="section-header">Mått som behövs för mönstret</h2>
    
@@ -1088,20 +1124,18 @@ document.addEventListener('click', function(e) {
 // Collapsible section
 const collapsible = document.querySelector(".collapsible");
 const content = document.querySelector(".content");
-const toggleIcon = document.getElementById("toggleIcon");
 
 collapsible.addEventListener("click", function() {
     this.classList.toggle("active");
     if (content.style.display === "block") {
         content.style.display = "none";
         this.textContent = "Förkortningar och tekniker";
-        toggleIcon.setAttribute("d", "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"); // Down arrow
     } else {
         content.style.display = "block";
         this.textContent = "Förkortningar och tekniker";
-        toggleIcon.setAttribute("d", "M169.4 233.4c-12.5-12.5-32.8-12.5-45.3 0l-192 192c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L256 173.3l169.4 169.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-192-192z"); // Up arrow
     }
 });
+
 
 
 
