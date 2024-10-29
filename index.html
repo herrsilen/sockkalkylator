@@ -699,7 +699,7 @@ function resetForm() {
         }
         
         // Reset all result values
-        const resultElements = document.querySelectorAll('#results .dynamic');
+        document.querySelectorAll('#results span[id]').forEach(element => {     element.textContent = '0'; });
         resultElements.forEach(element => element.textContent = '0');
         
         // Reset all instruction dynamic values
