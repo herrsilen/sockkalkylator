@@ -853,7 +853,7 @@ function initializeCounter() {
             // Toe increases counter
             const totalCastOnElement = document.getElementById('totalCastOn');
             const totalCastOn = totalCastOnElement ? parseInt(totalCastOnElement.textContent) : 0;
-            let stitchCount = parseInt(localStorage.getItem(`sockCalculator_${counterId}`) || totalCastOn.toString());
+            let stitchCount = parseInt(localStorage.getItem(`sockCalculator_${counterId}`) || (totalCastOn + 4).toString());
             
             if (valueSpan) {
                 valueSpan.textContent = stitchCount;
