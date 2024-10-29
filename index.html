@@ -753,7 +753,6 @@ function resetForm() {
 
 
 
-
 function calculate() {
     const stitchesPerCm = parseFloat(document.getElementById('stitchesPerCm').value);    // c
     const rowsPerCm = parseFloat(document.getElementById('rowsPerCm').value);            // d
@@ -769,9 +768,12 @@ function calculate() {
     // a × c × 0.9, rounded to multiple of 4
     const totalAfterIncrease = Math.round((footCircumference * stitchesPerCm * 0.9) / 4) * 4;
 
-    // NEW CALCULATION:
-    // Work backwards from total stitches to find cast-on number
-    const numberOfIncreaseRounds = Math.floor((totalAfterIncrease - 16) / 4); // Start with minimum 16 cast-on
+    // Calculate initial target cast-on (about 1/3 of total)
+    const targetCastOn = Math.round(totalAfterIncrease / 3 / 2) * 2;
+    
+    // Adjust cast-on to ensure whole number of increase rounds
+    const stitchesToIncrease = totalAfterIncrease - targetCastOn;
+    const numberOfIncreaseRounds = Math.round(stitchesToIncrease / 4);
     const totalCastOn = totalAfterIncrease - (numberOfIncreaseRounds * 4);
     const castOnPerNeedle = totalCastOn / 2;
 
@@ -822,6 +824,7 @@ function calculate() {
         initializeCounter();
     }
 }
+
 
 
 
