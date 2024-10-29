@@ -303,26 +303,59 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 
+	    /* Collapsible section styles */
+.collapsible {
+    cursor: pointer;
+    background-color: #f1f1f1;
+    color: #444;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 16px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.collapsible:hover {
+    background-color: #e0e0e0;
+}
+
+.content {
+    padding: 0 18px;
+    display: none; /* Hidden by default */
+    overflow: hidden;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+
+
     </style>
 </head>
 <body>
     <h1>Adams sockkalkylator</h1>
     <p>Sticka sockor anpassade för just dina–eller någon annan lyckligs–fötter.</p>
 
-	<h2 class="section-header">Förkortningar och tekniker i mönstret</h2>
-	<ul>
-		<li><a href="https://www.youtube.com/watch?v=y7MZPq928yM">Judy's Magic Cast-on</a></li>
-		<li>m = maska</li>
-		<li>rm = rät maska</li>
-		<li>am = avig maska</li>
-		<li><a href="https://www.youtube.com/watch?v=4x4l1JKXqcU">ö1mh</a></li>
-		<li><a href="https://www.youtube.com/watch?v=v0K0NHlYVyU">ö1mv</a></li>
-		<li><a href="https://www.youtube.com/watch?v=wXl4ugwKZBM">linda (och vänd)</a></li>
-		<li><a href="https://www.youtube.com/watch?v=GXBSmedZXfY">SSK = slip slip knit</a></li>
-		<li><a href="https://www.youtube.com/watch?v=6LC8aPIfNk4">2 am tillsammans</a></li>
-		<li><a href="https://www.youtube.com/watch?v=IA6sj3d1ztw">2 rm tillsammans</a></li>
-	</ul>
-
+<h2 class="section-header">Förkortningar och tekniker i mönstret</h2>
+<button class="collapsible">Visa</button>
+<div class="content">
+    <ul>
+        <li><a href="https://www.youtube.com/watch?v=y7MZPq928yM">Judy's Magic Cast-on</a></li>
+        <li>m = maska</li>
+        <li>rm = rät maska</li>
+        <li>am = avig maska</li>
+        <li><a href="https://www.youtube.com/watch?v=4x4l1JKXqcU">ö1mh = öka 1 maska högerlutande</a></li>
+        <li><a href="https://www.youtube.com/watch?v=v0K0NHlYVyU">ö1mv = öka 1 maska vänsterlutande</a></li>
+        <li><a href="https://www.youtube.com/watch?v=wXl4ugwKZBM">linda (och vänd)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=GXBSmedZXfY">SSK = slip slip knit</a></li>
+        <li><a href="https://www.youtube.com/watch?v=6LC8aPIfNk4">2 am tillsammans</a></li>
+        <li><a href="https://www.youtube.com/watch?v=IA6sj3d1ztw">2 rm tillsammans</a></li>
+    </ul>
+</div>
     <form id="sockCalculator">
         <h2 class="section-header">Mått som behövs för mönstret</h2>
    
@@ -1044,6 +1077,23 @@ document.addEventListener('click', function(e) {
     document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', saveCheckboxStates);
     });
+
+
+
+	// JavaScript for collapsible section
+const collapsible = document.querySelector(".collapsible");
+const content = document.querySelector(".content");
+
+collapsible.addEventListener("click", function() {
+    this.classList.toggle("active");
+    if (content.style.display === "block") {
+        content.style.display = "none";
+        this.textContent = "Visa Förkortningar och tekniker";
+    } else {
+        content.style.display = "block";
+        this.textContent = "Dölj Förkortningar och tekniker";
+    }
+});
 
 
     </script>
