@@ -669,28 +669,21 @@ function resetForm() {
         document.getElementById('sockCalculator').reset();
         
         // Clear localStorage
-        localStorage.removeItem('sockCalculatorValues');
-        localStorage.removeItem('sockCalculatorCheckboxes');
+        localStorage.clear();  // Clear all localStorage
         
         // Reset toe increases counter
         const toeCounter = document.getElementById('toe-increases-counter');
         if (toeCounter) {
-            localStorage.removeItem('sockCalculator_toe-increases-counter');
             const toeValueSpan = toeCounter.querySelector('.counter-value');
             if (toeValueSpan) {
                 toeValueSpan.textContent = '0';
             }
             toeCounter.classList.remove('completed');
-            const toeStitchesElement = document.getElementById('toe_increases_stitches');
-            if (toeStitchesElement) {
-                toeStitchesElement.textContent = '0';
-            }
         }
 
         // Reset gusset repeats counter
         const gussetCounter = document.getElementById('gusset-repeats-counter');
         if (gussetCounter) {
-            localStorage.removeItem('sockCalculator_gusset-repeats-counter');
             const gussetValueSpan = gussetCounter.querySelector('.counter-value');
             if (gussetValueSpan) {
                 gussetValueSpan.textContent = '0';
@@ -699,26 +692,27 @@ function resetForm() {
         }
         
         // Reset all result values
-        document.querySelectorAll('#results span[id]').forEach(element => {     element.textContent = '0'; });
-        resultElements.forEach(element => element.textContent = '0');
+        document.querySelectorAll('#results span[id]').forEach(element => {
+            element.textContent = '0';
+        });
         
         // Reset all instruction dynamic values
-        const instructionElements = document.querySelectorAll('#instructions .dynamic');
-        instructionElements.forEach(element => element.textContent = '0');
+        document.querySelectorAll('#instructions .dynamic').forEach(element => {
+            element.textContent = '0';
+        });
         
-        // Reset checkboxes
+        // Reset checkboxes and force update
         document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
             checkbox.checked = false;
         });
 
-	// Hide results
+        // Hide results section
         document.getElementById('results').classList.add('hidden');
         
     } catch (e) {
         console.error('Error resetting form:', e);
     }
 }
-
 
 
 
