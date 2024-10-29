@@ -725,6 +725,11 @@ function resetForm() {
             }
             gussetCounter.classList.remove('completed');
         }
+
+	// Reset counter styles    
+	document.querySelectorAll('.repeat-counter').forEach(counter => {
+        counter.classList.remove('completed');
+    });
         
         // Reset all result values
         document.querySelectorAll('#results span[id]').forEach(element => {
