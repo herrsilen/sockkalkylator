@@ -340,7 +340,7 @@ input[type="number"]::-webkit-inner-spin-button {
     <p>Sticka sockor anpassade för just dina–eller någon annan lyckligs–fötter.</p>
 
 <button class="collapsible" id="toggleButton">
-    Förkortningar och tekniker
+    Förkortningar och tekniker ▼
 </button>
     </button>
     <div class="content">
@@ -1092,10 +1092,10 @@ collapsible.addEventListener("click", function() {
     this.classList.toggle("active");
     if (content.style.display === "block") {
         content.style.display = "none";
-        this.textContent = "Förkortningar och tekniker";
+        this.textContent = "Förkortningar och tekniker ▼";
     } else {
         content.style.display = "block";
-        this.textContent = "Förkortningar och tekniker";
+        this.textContent = "Förkortningar och tekniker ▲";
     }
 });
 
