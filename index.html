@@ -862,21 +862,22 @@ function initializeCounter() {
             function updateButtons() {
                 const targetElement = document.getElementById('d_totalAfterIncrease');
                 const targetStitches = targetElement ? parseInt(targetElement.textContent) : 0;
+		const initialValue = totalCastOn + 4;
                 
-                if (minusBtn) minusBtn.disabled = stitchCount <= totalCastOn;
-                if (plusBtn) plusBtn.disabled = stitchCount >= targetStitches;
-                
-                if (stitchCount >= targetStitches) {
-                    counter.classList.add('completed');
-                } else {
-                    counter.classList.remove('completed');
-                }
+                 if (minusBtn) minusBtn.disabled = stitchCount <= initialValue;  // Changed condition here
+    if (plusBtn) plusBtn.disabled = stitchCount >= targetStitches;
+    
+    if (stitchCount >= targetStitches) {
+        counter.classList.add('completed');
+    } else {
+        counter.classList.remove('completed');
+    }
 
-                const stitchesElement = document.getElementById('toe_increases_stitches');
-                if (stitchesElement) {
-                    stitchesElement.textContent = stitchCount;
-                }
-            }
+    const stitchesElement = document.getElementById('toe_increases_stitches');
+    if (stitchesElement) {
+        stitchesElement.textContent = stitchCount;
+    }
+}
 
             function updateCounter(newCount) {
                 stitchCount = newCount;
