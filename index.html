@@ -340,7 +340,13 @@ input[type="number"]::-webkit-inner-spin-button {
     <h1>Adams sockkalkylator</h1>
     <p>Sticka sockor anpassade för just dina–eller någon annan lyckligs–fötter.</p>
 
-<button class="collapsible">Visa förkortningar och tekniker</button>
+<button class="collapsible" id="toggleButton">
+    Förkortningar och tekniker
+	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+        <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/>
+    </svg>
+</button>
+	
 <div class="content">
     <ul>
         <li><a href="https://www.youtube.com/watch?v=y7MZPq928yM">Judy's Magic Cast-on</a></li>
@@ -1079,20 +1085,24 @@ document.addEventListener('click', function(e) {
 
 
 
-	// Collapsible section
+// Collapsible section
 const collapsible = document.querySelector(".collapsible");
 const content = document.querySelector(".content");
+const toggleIcon = document.getElementById("toggleIcon");
 
 collapsible.addEventListener("click", function() {
     this.classList.toggle("active");
     if (content.style.display === "block") {
         content.style.display = "none";
-        this.textContent = "Visa förkortningar och tekniker";
+        this.textContent = "Förkortningar och tekniker";
+        toggleIcon.setAttribute("d", "M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"); // Down arrow
     } else {
         content.style.display = "block";
-        this.textContent = "Dölj förkortningar och tekniker";
+        this.textContent = "Förkortningar och tekniker";
+        toggleIcon.setAttribute("d", "M169.4 233.4c-12.5-12.5-32.8-12.5-45.3 0l-192 192c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L256 173.3l169.4 169.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-192-192z"); // Up arrow
     }
 });
+
 
 
     </script>
