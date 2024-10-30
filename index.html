@@ -630,6 +630,17 @@ input[type="number"]::-webkit-inner-spin-button {
 
 
 <script>
+
+	// Helper function to format numbers for display
+	function formatForDisplay(number, decimals = 0) {
+		return Number(number).toLocaleString('sv-SE', {
+			minimumFractionDigits: decimals,
+			maximumFractionDigits: decimals
+		});
+	}
+	
+
+	
     function saveFormValues() {
         try {
             const values = {
@@ -762,7 +773,7 @@ function calculate() {
     const footLength = parseFloat(document.getElementById('footLength').value);          // b
 
     if (!stitchesPerCm || !footCircumference || !rowsPerCm || !footLength) {
-        alert('Vänligen fyll i alla obligatoriska fält (Please fill in all required fields)');
+        alert('Du behöver fylla i alla mått innan du kan beräkna mönstret.');
         return;
     }
 
@@ -803,82 +814,98 @@ function calculate() {
     
 
     // Update results
-    document.getElementById('totalCastOn').textContent = totalCastOn;
-    document.getElementById('perNeedle').textContent = perNeedle;
-    document.getElementById('totalAfterIncrease').textContent = totalAfterIncrease;
-    document.getElementById('gussetIncrease').textContent = gussetIncrease;
-    document.getElementById('gussetExpand').textContent = gussetExpand;
-    document.getElementById('heelWrap').textContent = heelWrap;
-    document.getElementById('centralHeel').textContent = centralHeel;
-    document.getElementById('lengthBeforeGusset').textContent = lengthBeforeGusset.toFixed(1);
-    document.querySelectorAll('[id^="d_totalAfterIncrease"]').forEach(element => {
-        element.textContent = totalAfterIncrease;
-    });
-    
+    document.getElementById('totalCastOn').textContent = formatForDisplay(totalCastOn);
+    document.getElementById('perNeedle').textContent = formatForDisplay(perNeedle);
+    document.getElementById('totalAfterIncrease').textContent = formatForDisplay(totalAfterIncrease);
+    document.getElementById('gussetIncrease').textContent = formatForDisplay(gussetIncrease);
+    document.getElementById('gussetExpand').textContent = formatForDisplay(gussetExpand);
+    document.getElementById('heelWrap').textContent = formatForDisplay(heelWrap);
+    document.getElementById('centralHeel').textContent = formatForDisplay(centralHeel);
+    document.getElementById('lengthBeforeGusset').textContent = formatForDisplay(lengthBeforeGusset, 1);
+	
+	// Update all dynamic instruction elements (elements with IDs starting with "d_")
+	// These are the values that appear in the knitting instructions
 
-    updateInstructions();
+	document.querySelectorAll('[id^="d_"]').forEach(element => {
+	    try {
+        const id = element.id;
+        let value;
+        
+        switch(id) {
+            case 'd_castOn':
+                value = totalCastOn;
+                break;
+            case 'd_castOnPerNeedle':
+                value = totalCastOn / 2;
+                break;
+            case 'd_totalAfterIncrease':
+            case 'd_totalAfterIncrease2':
+                value = totalAfterIncrease;
+                break;
+            case 'd_lengthBeforeGusset':
+                value = lengthBeforeGusset;
+                break;
+            case 'd_perNeedle':
+            case 'd_perNeedle2':
+            case 'd_perNeedle3':
+            case 'd_perNeedle4':
+            case 'd_perNeedle5':
+            case 'd_perNeedle6':
+                value = perNeedle;
+                break;
+            case 'd_gussetIncreaseMinus2':
+            case 'd_gussetIncreaseMinus2_counter':
+                value = gussetIncrease - 2;
+                break;
+            case 'd_totalWithGusset':
+                value = totalAfterIncrease + gussetIncrease;
+                break;
+            case 'd_gussetIncrease':
+                value = gussetIncrease;
+                break;
+            case 'd_gussetExpand':
+            case 'd_gussetExpand2':
+                value = gussetExpand;
+                break;
+            case 'd_totalGussetIncrease':
+                value = gussetIncrease + gussetExpand;
+                break;
+            case 'd_heelWrapPlusOne':
+                value = heelWrap + 1;
+                break;
+            case 'd_heelWrap2':
+                value = heelWrap;
+                break;
+            case 'd_centralHeel':
+                value = centralHeel;
+                break;
+            case 'd_perNeedleMinus2':
+                value = perNeedle - 2;
+                break;
+            case 'd_perNeedlePlus2':
+                value = perNeedle + 2;
+                break;
+        }
+        
+        if (id === 'd_lengthBeforeGusset') {
+            element.textContent = formatForDisplay(value, 1);
+        } else {
+            element.textContent = formatForDisplay(value);
+        }
+    } catch (e) {
+		    console.error('Error updating dynamic elements:', element.id, e);
+	    }
+    });
+
     document.getElementById('results').classList.remove('hidden');
     saveFormValues();
 
-    // Update counter if it exists
     const valueSpan = document.querySelector('.counter-value');
     if (valueSpan) {
         initializeCounter();
     }
 }
 
-
-
-
-function updateInstructions() {
-    try {
-        const totalCastOn = document.getElementById('totalCastOn') ? document.getElementById('totalCastOn').textContent : '0';
-        const perNeedle = document.getElementById('perNeedle') ? document.getElementById('perNeedle').textContent : '0';
-        const totalAfterIncrease = document.getElementById('totalAfterIncrease') ? document.getElementById('totalAfterIncrease').textContent : '0';
-        const gussetIncrease = document.getElementById('gussetIncrease') ? document.getElementById('gussetIncrease').textContent : '0';
-        const gussetExpand = document.getElementById('gussetExpand') ? document.getElementById('gussetExpand').textContent : '0';
-        const heelWrap = document.getElementById('heelWrap') ? document.getElementById('heelWrap').textContent : '0';
-        const centralHeel = document.getElementById('centralHeel') ? document.getElementById('centralHeel').textContent : '0';
-        const lengthBeforeGusset = document.getElementById('lengthBeforeGusset') ? document.getElementById('lengthBeforeGusset').textContent : '0';
-
-
-	    
-        // Safe update function
-        function updateElement(id, value) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.textContent = value;
-            }
-        }
-
-        updateElement('d_castOn', totalCastOn);
-        updateElement('d_castOnPerNeedle', totalCastOn / 2);
-        updateElement('d_perNeedle', perNeedle);
-        updateElement('d_totalAfterIncrease', totalAfterIncrease);
-        updateElement('d_totalAfterIncrease2', totalAfterIncrease); // Make sure this matches totalAfterIncrease
-        updateElement('d_lengthBeforeGusset', lengthBeforeGusset);
-        updateElement('d_perNeedle2', perNeedle);
-        updateElement('d_gussetIncreaseMinus2', parseInt(gussetIncrease) - 2);
-        updateElement('d_gussetIncreaseMinus2_counter', parseInt(gussetIncrease) - 2);
-        updateElement('d_totalWithGusset', parseInt(totalAfterIncrease) + parseInt(gussetIncrease));
-        updateElement('d_perNeedle3', perNeedle);
-        updateElement('d_perNeedle4', perNeedle);
-        updateElement('d_gussetIncrease', gussetIncrease);
-        updateElement('d_gussetExpand', gussetExpand);
-        updateElement('d_gussetExpand2', gussetExpand);
-        updateElement('d_totalGussetIncrease', parseInt(gussetIncrease) + parseInt(gussetExpand));
-        updateElement('d_perNeedle5', perNeedle);
-        updateElement('d_heelWrapPlusOne', parseInt(heelWrap) + 1);
-        updateElement('d_heelWrap2', heelWrap);
-        updateElement('d_centralHeel', centralHeel);
-        updateElement('d_perNeedleMinus2', parseInt(perNeedle) - 2);
-        updateElement('d_perNeedlePlus2', parseInt(perNeedle) + 2);
-        updateElement('d_perNeedle6', perNeedle);
-	updateElement('d_totalAfterIncrease2', totalAfterIncrease);
-    } catch (e) {
-        console.error('Error updating instructions:', e);
-    }
-}
 
 
 
