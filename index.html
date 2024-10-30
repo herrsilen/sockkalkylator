@@ -112,6 +112,12 @@ input[type="number"]::-webkit-inner-spin-button {
     font-size: 16px;
 }
 
+.button-group button.secondary {
+    border: 1px solid #007bff;
+    background-color: white;
+    color: #007bff;
+}
+
 @media (max-width: 600px) {
     .button-group button {
         padding: 15px 20px;
@@ -389,7 +395,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
         <div class="button-group">
             <button type="button" onclick="calculate()">Beräkna</button>
-            <button type="button" onclick="resetForm()">Återställ</button>
+            <button type="button" class="secondary" onclick="resetForm()">Återställ</button>
         </div>
 
         <div id="results" style="margin-top: 20px;" class="hidden">
