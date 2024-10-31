@@ -365,7 +365,7 @@ input[type="number"]::-webkit-inner-spin-button {
             <label class="required">Maskor per cm</label>
             <span class="helper-text">Utgå från garnets stickfasthet tills du kan räkna antalet maskor per cm på ditt eget verk</span>
             <div class="input-with-unit">
-                <input type="number" id="stitchesPerCm" step="0.1" required>
+                <input type="text" pattern="[0-9]*[.,]?[0-9]*" inputmode="decimal" id="stitchesPerCm" required>
                 <span class="unit">maskor/cm</span>
             </div>
         </div>
@@ -375,7 +375,7 @@ input[type="number"]::-webkit-inner-spin-button {
             <label class="required">Varv per cm</label>
             <span class="helper-text">Utgå från garnets stickfasthet tills du kan räkna antalet varv per cm på ditt eget verk</span>
             <div class="input-with-unit">
-                <input type="number" id="rowsPerCm" step="0.1" required>
+                <input type="text" pattern="[0-9]*[.,]?[0-9]*" inputmode="decimal" id="rowsPerCm" required>
                 <span class="unit">varv/cm</span>
             </div>
         </div>
@@ -383,13 +383,13 @@ input[type="number"]::-webkit-inner-spin-button {
         <div class="form-group">
             <label class="required">Fotens omkrets</label>
 		<span class="helper-text">Mät över båtbenet</span>
-            <input type="number" id="footCircumference" step="0.1" required>
+            <input type="text" pattern="[0-9]*[.,]?[0-9]*" inputmode="decimal" id="footCircumference" required>
             <span class="unit">cm</span>
         </div>
 
         <div class="form-group">
             <label class="required">Fotens längd</label>
-            <input type="number" id="footLength" step="0.1" required>
+            <input type="text" pattern="[0-9]*[.,]?[0-9]*" inputmode="decimal" id="footLength" required>
             <span class="unit">cm</span>
         </div>
 
@@ -773,6 +773,18 @@ function resetForm() {
 
 
 function calculate() {
+
+	// Convert decimals
+	const inputs = ['stitchesPerCm', 'rowsPerCm', 'footCircumference', 'footLength'];
+    inputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.value = input.value.replace(',', '.');
+        }
+    });
+
+
+	
     const stitchesPerCm = parseFloat(document.getElementById('stitchesPerCm').value);    // c
     const rowsPerCm = parseFloat(document.getElementById('rowsPerCm').value);            // d
     const footCircumference = parseFloat(document.getElementById('footCircumference').value);  // a
