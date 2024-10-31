@@ -475,9 +475,19 @@ input[type="text"]::-webkit-inner-spin-button {
     </label>
 </div>
 <p>Markörerna separerar nu de <span class="dynamic" id="d_perNeedle2">0</span> maskorna under foten från hälkilarna (som efter första varvet har en maska var).</p>
-<p><b>Varv 3:</b> Rm på ovansidan foten.<br>
-1 rm, ö1mh, rm tills 1 m återstår, ö1mv, 1 rm. (Flytta över stickmarkörerna när du kommer till dem. De markerar hälkilarna.)</p>
-<p><b>Varv 4:</b> Rm hela varvet.</p>
+<div class="checklist">
+	    <label class="checkbox-item">
+		    <input type="checkbox" data-step="heel-gusset-row3">
+	    <span class="checkbox-text"><b>Varv 3:</b> Rm på ovansidan foten.<br>
+1 rm, ö1mh, rm tills 1 m återstår, ö1mv, 1 rm. (Flytta över stickmarkörerna när du kommer till dem. De markerar hälkilarna.)</span></label>
+	    </div>
+
+
+	    <div class="checklist">
+	    <label class="checkbox-item">
+		    <input type="checkbox" data-step="heel-gusset-row4">
+	    <span class="checkbox-text"><b>Varv 4:</b> Rm hela varvet.</span></label>
+	    </div>
 
       <p>Sticka varv <b>3</b> och <b>4</b> totalt <span class="dynamic" id="d_gussetIncreaseMinus2">0</span> gånger:</p>
 <div class="repeat-counter" id="gusset-repeats-counter">
@@ -491,7 +501,7 @@ input[type="text"]::-webkit-inner-spin-button {
        <div class="checklist">
     <label class="checkbox-item">
         <input type="checkbox" data-step="final-gusset-increase">
-        <span class="checkbox-text">Gör varv <b>1</b> (ökningsvarvet) en gång till.</span>
+        <span class="checkbox-text">Gör varv <b>3</b> (ökningsvarvet) en gång till.</span>
     </label>
 </div>
 <p>Nu har du totalt <span class="dynamic" id="d_totalWithGusset">0</span> maskor, dvs. <span class="dynamic" id="d_perNeedle3">0</span> maskor på ovansidan, <span class="dynamic" id="d_perNeedle4">0</span> maskor under foten och <span class="dynamic" id="d_gussetIncrease">0</span> maskor i varje hälkil.</p>
@@ -999,7 +1009,7 @@ function initializeCounter() {
 
         } else if (counterId === 'gusset-repeats-counter') {
             // Gusset repeats counter
-            let count = parseInt(localStorage.getItem(`sockCalculator_${counterId}`) || '0');
+            let count = parseInt(localStorage.getItem(`sockCalculator_${counterId}`) || '1');
             if (valueSpan) {
                 valueSpan.textContent = count;
             }
@@ -1008,7 +1018,7 @@ function initializeCounter() {
                 const totalElement = document.getElementById('d_gussetIncreaseMinus2_counter');
                 const total = totalElement ? parseInt(totalElement.textContent) : 0;
                 
-                if (minusBtn) minusBtn.disabled = count <= 0;
+                if (minusBtn) minusBtn.disabled = count <= 1;
                 if (plusBtn) plusBtn.disabled = count >= total;
                 
                 if (count >= total) {
@@ -1029,7 +1039,7 @@ function initializeCounter() {
             
             if (minusBtn) {
                 minusBtn.addEventListener('click', () => {
-                    if (count > 0) {
+                    if (count > 1) {
                         updateCounter(count - 1);
                     }
                 });
